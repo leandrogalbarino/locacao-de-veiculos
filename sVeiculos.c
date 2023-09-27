@@ -118,32 +118,77 @@ void listar_veiculos_disponiveis(Veiculos *veiculos)
     }
 }
 
+int compararVeiculos(const void *a, const void *b)
+{
+    const Veiculos *veiculo1 = (const Veiculos *)a;
+    const Veiculos *veiculo2 = (const Veiculos *)b;
+
+    return veiculo2->quilometragem - veiculo1->quilometragem;
+}
+
+void reorganizarLista(Veiculos **l, Veiculos **vet, int tamanho)
+{
+    if (tamanho == 0)
+    {
+        *l == NULL;
+        return;
+    }
+    *l = vet[0];
+
+    for (int i = 0; i < tamanho; i++)
+    {
+        vet[i]->prox = vet[i+1];
+    }
+    
+    vet[tamanho - 1]->prox = NULL;
+}
+
+Veiculos lista_ordena(Veiculos *l)
+{
+    int tamanho = 0;
+    Veiculos *p = l;
+    while (p != NULL)
+    {
+        tamanho++;
+        p = p->prox;
+    }
+
+    Veiculos *vet[tamanho];
+    int i = 0;
+    for (p = l; p != NULL; p = p->prox)
+    {
+        vet[i] = p;
+        p = p->prox;
+        i++;
+    }
+    qsort(vet, tamanho, sizeof(Veiculos), compararVeiculos);
+    reorganizarLista(&l, vet, tamanho);
+}
+
 void listar_placa_3_mais_rodados(Veiculos *veiculos)
 {
-    Veiculos *primeiro = (Veiculos *)malloc(sizeof(Veiculos));
-    Veiculos *segundo = (Veiculos *)malloc(sizeof(Veiculos));
-    Veiculos *terceiro = (Veiculos *)malloc(sizeof(Veiculos));
-    primeiro->quilometragem = -1;
-    segundo->quilometragem = -2;
-    terceiro->quilometragem = -3;
+    Veiculos *aux;
+    Veiculos *p;
 
     if (veiculos == NULL)
     {
         printf("NAO EXISTEM VEICULOS CADASTRADOS!!\n\n");
     }
-    Veiculos *p;
+    Veiculos *ant = NULL;
+
     for (p = veiculos; p != NULL; p = p->prox)
     {
-        if (p->quilometragem > terceiro->quilometragem)
+        if (ant != NULL && p->prox != NULL)
         {
-            
-            if (terceiro->quilometragem > segundo->quilometragem)
+            if (p->prox->quilometragem > p->quilometragem)
             {
-                if (segundo->quilometragem > primeiro->quilometragem)
-                {
-                }
+                ant->prox = p->prox;
+                aux = p->prox->prox;
+                p->prox->prox = p;
+                p->prox = aux;
             }
         }
+        ant = p;
     }
 
     printf("3 VEICULOS MAIS RODADOS:\n\n");
