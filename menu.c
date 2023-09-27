@@ -74,8 +74,7 @@ void apresenta_relatorio(Veiculos *veiculos, Clientes *clientes, Locacao *locaca
         listar_placa_3_mais_rodados();
         break;
     case 5:
-        // R5) Listar a placa e o modelo de todos os veículos disponíveis (não estão locados).
-        listar_veiculos_disponiveis();
+        // listar_veiculos_disponiveis();
         break;
     default:
         break;
@@ -113,17 +112,17 @@ void menu_opcoes(Veiculos *veiculos, Clientes *clientes, Locacao *locacao, int e
     switch (escolha)
     {
     case 1:
-        incluir_veiculos(veiculos);
+        // incluir_veiculos(veiculos);
         break;
     case 2:
-        listar_veiculos(veiculos);
+        // listar_veiculos(veiculos);
         break;
 
     case 3:
-        incluir_clientes(clientes);
+        // incluir_clientes(clientes);
         break;
     case 4:
-        listar_clientes(clientes);
+        // listar_clientes(clientes);
         break;
     case 5:
         realizar_locacao(locacao);
@@ -147,14 +146,14 @@ void menu_principal(Veiculos *veiculos, Clientes *clientes, Locacao *locacao)
     int escolha;
     printf("MENU:\n\n");
 
-    printf("1. incluir veículos\n");
-    printf("2. listar veículos\n");
-    printf("3. incluir clientes\n");
-    printf("4. listar clientes\n");
-    printf("5. realizar locação\n");
-    printf("6. devolver veículo\n");
-    printf("7. listar locações\n");
-    printf("8. gerar relatórios\n");
+    printf("1. Incluir veiculos\n");
+    printf("2. Listar veiculos\n");
+    printf("3. Incluir clientes\n");
+    printf("4. Listar clientes\n");
+    printf("5. Realizar locação\n");
+    printf("6. Devolver veículo\n");
+    printf("7. Listar locações\n");
+    printf("8. Gerar relatorios\n");
 
     do
     {
