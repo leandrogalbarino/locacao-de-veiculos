@@ -11,7 +11,7 @@ struct veiculos
     int ano_fabricacao;
     int quilometragem;
     int valor_diaria;
-    bool disponibilidade;
+    Data disponibilidade;
     struct veiculos *prox;
 };
 typedef struct veiculos Veiculos;

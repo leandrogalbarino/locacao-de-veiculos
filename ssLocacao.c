@@ -3,30 +3,30 @@
 #include <stdbool.h>
 #include "estruturas.h"
 
-struct data
+
+void dias_de_locacao(Data *retirada, Data *devolucao)
 {
-    int retirada;
-    int devolucao;
-};
-typedef struct data Data;
+    printf("DIGITE A DATA DE RETIRADA:\n");
 
-struct locacao_veiculos_por_clientes
-{
-    Clientes *cliente;
-    // trocar disponibilidade do veiculo alocado; Retornar a posicao do veiculo alocado
-    Veiculos *veiculo_alocado;
+    printf("DIA:");
+    scanf("%d", retirada->dia);
+    printf("MES:");
+    scanf("%d", retirada->mes);
+    printf("ANO:");
+    scanf("%d", retirada->ano);
+    printf("\n");    
 
-    Data dia;
-    // veiculo so pode ser alocado se estiver disponivel na data;
+    printf("DIGITE A DATA DE DEVOLUCAO:\n");
+    printf("DIA:");
+    scanf("%d", devolucao->dia);
+    printf("MES:");
+    scanf("%d", devolucao->mes);
+    printf("ANO:");    
+    scanf("%d", devolucao->ano);    
+    printf("\n");    
+}
 
-    int valor_total_pago;
-
-    struct locacao_veiculos_por_clientes *prox;
-};
-typedef struct locacao_veiculos_por_clientes Locacao;
-// LISTA DE LOCACAO DE VEICULOS
-
-void informacoes_de_locacao(char *nome_cliente, char *placa)
+void informacoes_de_locacao(char *nome_cliente, char *placa, Data *retirada, Data *devolucao)
 {
     printf("PARA FAZER A LOCACAO DE UM VEICULO:\n\n");
     printf("DIGITE SEU NOME:");
@@ -35,9 +35,10 @@ void informacoes_de_locacao(char *nome_cliente, char *placa)
     printf("DIGITE A PLACA DO VEICULO QUE DESEJA FAZER A LOCACAO:");
     scanf("%s", placa);
     printf("\n");
+    dias_de_locacao(retirada, devolucao);
 }
 
-Clientes verif_cliente_cadastrado(Clientes *clientes, char *nome_cliente)
+Clientes *verif_cliente_cadastrado(Clientes *clientes, char *nome_cliente)
 {
     Clientes *c;
     for (c = clientes; c != NULL; c = c->prox)
@@ -50,19 +51,29 @@ Clientes verif_cliente_cadastrado(Clientes *clientes, char *nome_cliente)
     return NULL;
 }
 
-Veiculos verif_veiculos_cadastrado(Veiculos *veiculos, char *placa)
+Veiculos *verif_veiculos_cadastrado(Veiculos *veiculos, char *placa)
 {
     Veiculos *v;
     for (v = veiculos; v != NULL; v = v->prox)
     {
         if (strcmp(v->placa, placa) == 0)
         {
-            return v;
+            if (v->disponibilidade == true)
+            {
+                return v;
+            }
+            break;
         }
     }
     return NULL;
 }
 
+// bool verif_disponibilidade(Veiculos *veiculo_locado, Locacao *locacao){
+//     if(veiculo_locado->disponibilidade == true){
+//         return true;
+//     }
+//     return false;
+// }
 Locacao *realizar_locacao(Locacao *locacao, Clientes *clientes, Veiculos *veiculos)
 {
     if (clientes == NULL)
@@ -81,15 +92,23 @@ Locacao *realizar_locacao(Locacao *locacao, Clientes *clientes, Veiculos *veicul
 
     char nome_cliente[50];
     char placa[50];
-    informacoes_de_locacao(nome_cliente, placa);
+    Data retirada;
+    Data devolucao;
+    informacoes_de_locacao(nome_cliente, placa, &retirada, &devolucao);
 
     novo->cliente = verif_cliente_cadastrado(clientes, nome_cliente);
-    novo->veiculo_alocado = verif_veiculos_cadastrado(veiculos, placa);
+    novo->veiculo_locado = verif_veiculos_cadastrado(veiculos, placa);
+    if(novo->veiculo_locado->disponibilidade == true){
+        novo->retirada = retirada;
+        novo->devolucao = devolucao;
+    }
 
-    if (novo->cliente == NULL || novo->veiculo_alocado == NULL)
+    if (novo->cliente == NULL || novo->veiculo_locado == NULL)
     {
-        printf("NAO FOI POSSIVEL REALIZAR A LOCACAO!!\n CLIENTE OU VEICULO NAO CADASTRADO!!");
+        printf("NAO FOI POSSIVEL REALIZAR A LOCACAO!!");
         free(novo);
         return locacao;
     }
+
+    return novo;
 }
