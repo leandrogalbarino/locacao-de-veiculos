@@ -70,8 +70,7 @@ void apresenta_relatorio(Veiculos *veiculos, Clientes *clientes, Locacao *locaca
         listar_faturamento_mes();
         break;
     case 4:
-        // R4) Listar a placa dos 3 veículos mais rodados (quilometragem mais alta).
-        listar_placa_3_mais_rodados();
+        // listar_placa_3_mais_rodados();
         break;
     case 5:
         // listar_veiculos_disponiveis();
@@ -112,14 +111,14 @@ void menu_opcoes(Veiculos *veiculos, Clientes *clientes, Locacao *locacao, int e
     switch (escolha)
     {
     case 1:
-        // incluir_veiculos(veiculos);
+        // veiculos = incluir_veiculos(veiculos);
         break;
     case 2:
         // listar_veiculos(veiculos);
         break;
 
     case 3:
-        // incluir_clientes(clientes);
+        // clientes = incluir_clientes(clientes);
         break;
     case 4:
         // listar_clientes(clientes);

@@ -1,20 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-
-struct veiculos
-{
-    char *placa[50];
-    char *marca[50];
-    char *modelo[50];
-    int ano_fabricacao;
-    int quilometragem;
-    int valor_diaria;
-    bool disponibilidade;
-    struct veiculos *prox;
-};
-typedef struct veiculos Veiculos;
-// LISTA DE CADASTRO DE VEICULOS
+#include "estruturas.h"
 
 void informacoes_veiculo(Veiculos *novo)
 {
@@ -143,7 +130,7 @@ void reorganizarLista(Veiculos **l, Veiculos **vet, int tamanho)
     vet[tamanho - 1]->prox = NULL;
 }
 
-Veiculos lista_ordena(Veiculos *l)
+Veiculos* lista_ordena(Veiculos *l)
 {
     int tamanho = 0;
     Veiculos *p = l;
@@ -163,33 +150,37 @@ Veiculos lista_ordena(Veiculos *l)
     }
     qsort(vet, tamanho, sizeof(Veiculos), compararVeiculos);
     reorganizarLista(&l, vet, tamanho);
+    return l;
 }
 
+// R4) Listar a placa dos 3 veículos mais rodados (quilometragem mais alta).
 void listar_placa_3_mais_rodados(Veiculos *veiculos)
 {
     Veiculos *aux;
     Veiculos *p;
+    int num_veiculos = 0;
 
     if (veiculos == NULL)
     {
         printf("NAO EXISTEM VEICULOS CADASTRADOS!!\n\n");
     }
-    Veiculos *ant = NULL;
 
-    for (p = veiculos; p != NULL; p = p->prox)
-    {
-        if (ant != NULL && p->prox != NULL)
-        {
-            if (p->prox->quilometragem > p->quilometragem)
-            {
-                ant->prox = p->prox;
-                aux = p->prox->prox;
-                p->prox->prox = p;
-                p->prox = aux;
-            }
-        }
-        ant = p;
-    }
+    Veiculos *ant = NULL;
+    veiculos = lista_ordena(veiculos);
 
     printf("3 VEICULOS MAIS RODADOS:\n\n");
+
+    for(p = veiculos; p != NULL; p = p->prox){
+        if(num_veiculos == 3){
+            break;
+        }
+        printf("PLACA:%s\n", p->placa);
+        num_veiculos++;
+    }
+    if(num_veiculos < 3){
+        for(int i = num_veiculos; i <= 3; i++){
+            printf("NAO EXISTE %d VEICULOS CADASTRADOS\n", i);
+        }
+    }
+    printf("\n");
 }

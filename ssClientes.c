@@ -1,15 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-struct clientes
-{
-    char nome[50];
-    int cnh;
-    int telefone;
-    struct clientes *prox;
-};
-typedef struct clientes Clientes;
-// LISTA DE CADASTRO DE CLIENTES
+#include "estruturas.h"
 
 void informacoes_veiculo(Clientes *novo)
 {
