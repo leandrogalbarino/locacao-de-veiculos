@@ -1,7 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "estruturas.h"
+#include <string.h>
+#include "veiculos.h"
+
+Veiculos *cria_lista_veiculos()
+{
+    return NULL;
+}
 
 void informacoes_veiculo(Veiculos *novo)
 {
@@ -15,15 +21,29 @@ void informacoes_veiculo(Veiculos *novo)
     scanf(" %49s", novo->placa);
 
     printf("ANO DA FABRICACAO:");
-    scanf("%d", novo->ano_fabricacao);
+    scanf("%d", &novo->ano_fabricacao);
 
     printf("QUILOMETRAGEM ATUAL:");
-    scanf("%d", novo->quilometragem);
+    scanf("%d", &novo->quilometragem);
 
     printf("VALOR DA DIARIA:");
-    scanf("%d", novo->valor_diaria);
+    scanf("%d", &novo->valor_diaria);
 
+    novo->disponibilidade = true;
     printf("\n");
+}
+
+Veiculos *verif_veiculos_cadastrado(Veiculos *veiculos, char *placa)
+{
+    Veiculos *v;
+    for (v = veiculos; v != NULL; v = v->prox)
+    {
+        if (strcmp(v->placa, placa) == 0)
+        {
+            return v;
+        }
+    }
+    return NULL;
 }
 
 Veiculos *incluir_veiculos(Veiculos *veiculos)
@@ -35,14 +55,42 @@ Veiculos *incluir_veiculos(Veiculos *veiculos)
         exit(1);
     }
     informacoes_veiculo(novo);
-    novo->prox = NULL;
-
+    
+    if (verif_veiculos_cadastrado(veiculos, novo->placa) != NULL)
+    {
+        printf("VEICULO JA CADASTRADO!!\n\n");
+        free(novo);
+        return veiculos;
+    }
     if (veiculos == NULL)
     {
+        novo->prox = veiculos;
         return novo;
     }
+    Veiculos *p;
+    Veiculos *ant = NULL;
 
-    veiculos->prox = novo;
+    for (p = veiculos; p != NULL; p = p->prox)
+    {
+        if (p->quilometragem < novo->quilometragem)
+        {
+            if (ant == NULL) // Se ant for NULL, significa que é o novo início da lista
+            {
+                novo->prox = veiculos; // O próximo do novo veículo aponta para o início da lista existente
+                veiculos = novo;       // Atualiza o início da lista para o novo veículo
+            }
+            else
+            {
+                ant->prox = novo; // O próximo do veículo anterior aponta para o novo veículo
+                novo->prox = p;   // O próximo do novo veículo aponta para o veículo atual
+            }
+            return veiculos; // Importante retornar a lista atualizada aqui.
+        }
+        ant = p;
+    }
+    if (p == NULL)
+        ant->prox = novo;
+
     return veiculos;
 }
 
@@ -64,18 +112,18 @@ void listar_veiculos(Veiculos *veiculos)
     Veiculos *p;
     if (veiculos == NULL)
     {
-        printf("NAO EXISTEM VEICULOS CADASTRADOS!!");
+        printf("NAO EXISTEM VEICULOS CADASTRADOS!!\n\n");
     }
     for (p = veiculos; p != NULL; p = p->prox)
     {
-        printf("PLACA:%s\n", veiculos->placa);
-        printf("MARCA:%s\n", veiculos->marca);
-        printf("MODELO:%s\n", veiculos->modelo);
+        printf("PLACA:%s\n", p->placa);
+        printf("MARCA:%s\n", p->marca);
+        printf("MODELO:%s\n", p->modelo);
 
-        printf("ANO DE FABRICACAO:%d\n");
-        printf("QUILOMETRAGEM:%d\n");
-        printf("VALOR DA DIARIA:%d\n");
-        printf("DISPONIVEL:%s\n\n", veiculo_disponivel(veiculos->disponibilidade));
+        printf("ANO DE FABRICACAO:%d\n", p->ano_fabricacao);
+        printf("QUILOMETRAGEM:%d\n", p->quilometragem);
+        printf("VALOR DA DIARIA:%d\n", p->valor_diaria);
+        printf("DISPONIVEL:%s\n\n", veiculo_disponivel(p->disponibilidade));
     }
 }
 
@@ -94,8 +142,8 @@ void listar_veiculos_disponiveis(Veiculos *veiculos)
     {
         if (p->disponibilidade == true)
         {
-            printf("PLACA:%s\n", veiculos->placa);
-            printf("MODELO:%s\n\n", veiculos->modelo);
+            printf("PLACA:%s\n", p->placa);
+            printf("MODELO:%s\n\n", p->modelo);
             disponiveis++;
         }
     }
@@ -105,81 +153,31 @@ void listar_veiculos_disponiveis(Veiculos *veiculos)
     }
 }
 
-int compararVeiculos(const void *a, const void *b)
-{
-    const Veiculos *veiculo1 = (const Veiculos *)a;
-    const Veiculos *veiculo2 = (const Veiculos *)b;
-
-    return veiculo2->quilometragem - veiculo1->quilometragem;
-}
-
-void reorganizarLista(Veiculos **l, Veiculos **vet, int tamanho)
-{
-    if (tamanho == 0)
-    {
-        *l == NULL;
-        return;
-    }
-    *l = vet[0];
-
-    for (int i = 0; i < tamanho; i++)
-    {
-        vet[i]->prox = vet[i+1];
-    }
-    
-    vet[tamanho - 1]->prox = NULL;
-}
-
-Veiculos* lista_ordena(Veiculos *l)
-{
-    int tamanho = 0;
-    Veiculos *p = l;
-    while (p != NULL)
-    {
-        tamanho++;
-        p = p->prox;
-    }
-
-    Veiculos *vet[tamanho];
-    int i = 0;
-    for (p = l; p != NULL; p = p->prox)
-    {
-        vet[i] = p;
-        p = p->prox;
-        i++;
-    }
-    qsort(vet, tamanho, sizeof(Veiculos), compararVeiculos);
-    reorganizarLista(&l, vet, tamanho);
-    return l;
-}
-
-// R4) Listar a placa dos 3 veículos mais rodados (quilometragem mais alta).
 void listar_placa_3_mais_rodados(Veiculos *veiculos)
 {
     Veiculos *aux;
     Veiculos *p;
-    int num_veiculos = 0;
 
     if (veiculos == NULL)
     {
         printf("NAO EXISTEM VEICULOS CADASTRADOS!!\n\n");
+        return;
     }
 
-    Veiculos *ant = NULL;
-    veiculos = lista_ordena(veiculos);
+    int num_veiculos = 0;
+    printf("\t3 VEICULOS MAIS RODADOS:\n");
 
-    printf("3 VEICULOS MAIS RODADOS:\n\n");
-
-    for(p = veiculos; p != NULL; p = p->prox){
-        if(num_veiculos == 3){
-            break;
-        }
-        printf("PLACA:%s\n", p->placa);
+    for (p = veiculos; p != NULL && num_veiculos < 3; p = p->prox)
+    {
         num_veiculos++;
+        printf("%d - PLACA:%s\n", num_veiculos, p->placa);
     }
-    if(num_veiculos < 3){
-        for(int i = num_veiculos; i <= 3; i++){
-            printf("NAO EXISTE %d VEICULOS CADASTRADOS\n", i);
+
+    if (num_veiculos < 3)
+    {
+        for (int i = num_veiculos; i < 3; i++)
+        {
+            printf("%d - NAO EXISTE\n", i + 1);
         }
     }
     printf("\n");
