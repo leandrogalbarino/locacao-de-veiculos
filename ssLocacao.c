@@ -112,3 +112,16 @@ Locacao *realizar_locacao(Locacao *locacao, Clientes *clientes, Veiculos *veicul
 
     return novo;
 }
+
+Locacao* encontrar_locacao(Locacao* locacao, char* nome, char* placa){
+    Locacao* p;
+
+//percore a lista de locacao e verifica se o nome e a placa solicitada foi encontrada na locacao
+//se for encontrada retorna um ponteiro pra essa locacao, senao retorna NULL
+    for(p=locacao;p!=NULL;p=p->prox){
+        if(strcmp(p->cliente->nome, nome) == 0 && srtcmp(p->veiculo_locado->placa==placa) == 0){
+            return p;
+        }
+    }
+    return NULL;
+}

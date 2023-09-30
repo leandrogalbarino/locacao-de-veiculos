@@ -127,7 +127,7 @@ void menu_opcoes(Veiculos *veiculos, Clientes *clientes, Locacao *locacao, int e
         realizar_locacao(locacao);
         break;
     case 6:
-        devolver_veiculo(locacao);
+        //devolver_veiculo(locacao);
         break;
     case 7:
         listar_locacao(locacao);
