@@ -42,4 +42,7 @@ bool verif_disponibilidade(Locacao *veiculo_locado, Locacao *locacao);
 
 Locacao *realizar_locacao(Locacao *locacao, Clientes *clientes, Veiculos *veiculos);
 
+void devolver_veiculo(Locacao *locacao, Veiculos *veiculos);
+
+Locacao *encontrar_locacao(Locacao *locacao, char *nome, char *placa);
 #endif

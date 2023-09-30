@@ -137,3 +137,47 @@ Locacao *realizar_locacao(Locacao *locacao, Clientes *clientes, Veiculos *veicul
 
     return novo;
 }
+
+Locacao *encontrar_locacao(Locacao *locacao, char *nome, char *placa)
+{
+    Locacao *p;
+
+    // percore a lista de locacao e verifica se o nome e a placa solicitada foi encontrada na locacao
+    // se for encontrada retorna um ponteiro pra essa locacao, senao retorna NULL
+    for (p = locacao; p != NULL; p = p->prox)
+    {
+        if (strcmp(p->cliente->nome, nome) == 0 && strcmp(p->veiculo_locado->placa, placa) == 0)
+        {
+            return p;
+        }
+    }
+    return NULL;
+}
+
+void devolver_veiculo(Locacao *locacao, Veiculos *veiculos)
+{
+    char nome[50];
+    char placa[50];
+    // Solicita o nome do cliente e a placa do carro
+    printf("Digite o nome do cliente: ");
+    scanf("%s", nome);
+
+    printf("Digite a placa do carro: ");
+    scanf("%s", placa);
+
+    // Chama a funcao para verificar se o nome e a placa foram encontradas na locacao
+    // Se for diferente de NULL significa que foi encontrado e sera possivel devolver o veiculo
+    // Mudando a flag pra true
+    Locacao *loc = encontrar_locacao(locacao, nome, placa);
+
+    if (loc != NULL)
+    {
+        loc->veiculo_locado->disponibilidade = true;
+
+        printf("Veiculo devolvido com sucesso.\n");
+    }
+    else
+    {
+        printf("Locacao nao foi encontrada.\n");
+    }
+}

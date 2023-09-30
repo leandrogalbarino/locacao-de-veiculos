@@ -85,10 +85,10 @@ void menu_opcoes(Veiculos **veiculos, Clientes **clientes, Locacao **locacao, in
         *locacao = realizar_locacao(*locacao, *clientes, *veiculos);
         break;
     case 6:
-        // devolver_veiculo(locacao);
+        devolver_veiculo(*locacao, *veiculos);
         break;
     case 7:
-        // listar_locacao(locacao);
+        // listar_locacao(*locacao);
         break;
     case 8:
         menu_relatorios(*veiculos, *clientes, *locacao);

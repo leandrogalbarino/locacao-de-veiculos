@@ -55,7 +55,7 @@ Veiculos *incluir_veiculos(Veiculos *veiculos)
         exit(1);
     }
     informacoes_veiculo(novo);
-    
+
     if (verif_veiculos_cadastrado(veiculos, novo->placa) != NULL)
     {
         printf("VEICULO JA CADASTRADO!!\n\n");
@@ -182,3 +182,4 @@ void listar_placa_3_mais_rodados(Veiculos *veiculos)
     }
     printf("\n");
 }
+
