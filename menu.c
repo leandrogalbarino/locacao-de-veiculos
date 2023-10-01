@@ -10,16 +10,13 @@ void apresenta_relatorio(Veiculos *veiculos, Clientes *clientes, Locacao *locaca
     switch (escolha)
     {
     case 1:
-        // listar_loc_ativas();
-        // R1) Listar todas as locações ativas (clientes ainda não devolveram os carros) em uma certa data (a data é informada pelo usuário);
+        listar_loc_ativas(locacao);
         break;
     case 2:
-        // R2) Listar todas as locações já realizadas por um cliente (a CNH do cliente é informada pelo usuário);
-        // listar_loc_realizadas();
+        listar_loc_realizadas(locacao);
         break;
     case 3:
-        // R3) Listar o faturamento da locadora por mês (mês é informado pelo usuário). Por faturamento, entenda o total arrecadado em locações.
-        // listar_faturamento_mes();
+        listar_faturamento_mes(locacao);
         break;
     case 4:
         listar_placa_3_mais_rodados(veiculos);
@@ -88,7 +85,7 @@ void menu_opcoes(Veiculos **veiculos, Clientes **clientes, Locacao **locacao, in
         devolver_veiculo(*locacao, *veiculos);
         break;
     case 7:
-        // listar_locacao(*locacao);
+        listar_locacao(*locacao);
         break;
     case 8:
         menu_relatorios(*veiculos, *clientes, *locacao);
