@@ -77,7 +77,7 @@ Veiculos *incluir_veiculos(Veiculos *veiculos)
             if (ant == NULL) // Se ant for NULL, significa que é o novo início da lista
             {
                 novo->prox = veiculos; // O próximo do novo veículo aponta para o início da lista existente
-                veiculos = novo;       // Atualiza o início da lista para o novo veículo
+                return novo;           // Atualiza o início da lista para o novo veículo
             }
             else
             {
@@ -89,8 +89,10 @@ Veiculos *incluir_veiculos(Veiculos *veiculos)
         ant = p;
     }
     if (p == NULL)
+    {
         ant->prox = novo;
-
+        novo->prox = NULL;
+    }
     return veiculos;
 }
 
@@ -135,6 +137,7 @@ void listar_veiculos_disponiveis(Veiculos *veiculos)
     if (veiculos == NULL)
     {
         printf("NAO EXISTEM VEICULOS CADASTRADOS!!\n\n");
+        return;
     }
 
     printf("VEICULOS DISPONIVEIS:\n\n");
@@ -182,4 +185,3 @@ void listar_placa_3_mais_rodados(Veiculos *veiculos)
     }
     printf("\n");
 }
-

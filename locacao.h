@@ -44,13 +44,14 @@ Locacao *realizar_locacao(Locacao *locacao, Clientes *clientes, Veiculos *veicul
 
 void devolver_veiculo(Locacao *locacao, Veiculos *veiculos);
 
-Locacao *encontrar_locacao(Locacao *locacao, char *nome, char *placa);
-#endif
+Locacao *encontrar_locacao(Locacao *locacao, int cnh, char *placa);
 
 void listar_locacao(Locacao *locacao);
 
-void listar_loc_ativas(Locacao* locacao);
+void listar_loc_ativas(Locacao *locacao);
 
 void listar_loc_realizadas(Locacao *locacao);
 
 void listar_faturamento_mes(Locacao *locacao);
+
+#endif

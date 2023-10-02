@@ -44,7 +44,8 @@ Clientes *incluir_clientes(Clientes *clientes)
         exit(1);
     }
     informacoes_cliente(novo);
-    if(verif_cliente_cadastrado(clientes, novo->cnh) != NULL){
+    if (verif_cliente_cadastrado(clientes, novo->cnh) != NULL)
+    {
         printf("CLIENTE JA CADATRADO!! \n");
         free(novo);
         return clientes;
