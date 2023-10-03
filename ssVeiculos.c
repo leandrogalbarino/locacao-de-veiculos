@@ -74,17 +74,17 @@ Veiculos *incluir_veiculos(Veiculos *veiculos)
     {
         if (p->quilometragem < novo->quilometragem)
         {
-            if (ant == NULL) // Se ant for NULL, significa que é o novo início da lista
+            if (ant == NULL)
             {
-                novo->prox = veiculos; // O próximo do novo veículo aponta para o início da lista existente
-                return novo;           // Atualiza o início da lista para o novo veículo
+                novo->prox = veiculos;
+                return novo;
             }
             else
             {
-                ant->prox = novo; // O próximo do veículo anterior aponta para o novo veículo
-                novo->prox = p;   // O próximo do novo veículo aponta para o veículo atual
+                ant->prox = novo;
+                novo->prox = p;
             }
-            return veiculos; // Importante retornar a lista atualizada aqui.
+            return veiculos;
         }
         ant = p;
     }
@@ -110,7 +110,7 @@ char *veiculo_disponivel(bool disponibilidade)
 
 void listar_veiculos(Veiculos *veiculos)
 {
-    printf("VEICULOS CADASTRADOS:\n\n");
+    printf("VEICULOS CADASTRADOS:\n");
     Veiculos *p;
     if (veiculos == NULL)
     {
@@ -140,7 +140,7 @@ void listar_veiculos_disponiveis(Veiculos *veiculos)
         return;
     }
 
-    printf("VEICULOS DISPONIVEIS:\n\n");
+    printf("VEICULOS DISPONIVEIS:\n");
     for (p = veiculos; p != NULL; p = p->prox)
     {
         if (p->disponibilidade == true)
@@ -152,7 +152,7 @@ void listar_veiculos_disponiveis(Veiculos *veiculos)
     }
     if (disponiveis == 0)
     {
-        printf("NAO EXISTEM VEICULOS DISPONIVEIS!!");
+        printf("NAO EXISTEM VEICULOS DISPONIVEIS!!\n");
     }
 }
 
@@ -168,7 +168,7 @@ void listar_placa_3_mais_rodados(Veiculos *veiculos)
     }
 
     int num_veiculos = 0;
-    printf("\t3 VEICULOS MAIS RODADOS:\n");
+    printf("3 VEICULOS MAIS RODADOS:\n");
 
     for (p = veiculos; p != NULL && num_veiculos < 3; p = p->prox)
     {

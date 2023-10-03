@@ -51,20 +51,13 @@ Clientes *incluir_clientes(Clientes *clientes)
         return clientes;
     }
 
-    novo->prox = NULL;
-
-    if (clientes == NULL)
-    {
-        return novo;
-    }
-
-    clientes->prox = novo;
-    return clientes;
+    novo->prox = clientes;
+    return novo;
 }
 
 void listar_clientes(Clientes *clientes)
 {
-    printf("\tCLIENTES CADASTRADOS:\n\n");
+    printf("CLIENTES CADASTRADOS:\n");
     Clientes *p;
     if (clientes == NULL)
     {

@@ -11,7 +11,6 @@
 // 2) A quilometragem atual do veículo deve ser solicitada pelo programa e atualizada pelo usuário sempre que o veículo for devolvido.
 // 3) A flag “disponibilidade” deve ser atualizada automaticamente pelo programa sempre que o veículo for locado (indisponível) e devolvido (disponível).
 
-
 // 4) O valor total pago deve ser calculado automaticamente pelo programa, com base no valor da diária e nos dias locados.
 // 5) Uma locação só pode ser feita por um cliente já cadastrado e um veículo já cadastrado;
 // 6) Não pode haver duplicidade de informações sobre clientes e veículos. Por exemplo, uma locação não armazena/replica os dados de clientes e veículos, mas guarda apenas ponteiros que apontam para os respectivos cliente e veículo já previamente cadastrados.
