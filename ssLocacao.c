@@ -154,48 +154,66 @@ Locacao *encontrar_locacao(Locacao *locacao, int cnh, char *placa)
     return NULL;
 }
 
-void devolver_veiculo(Locacao *locacao, Veiculos *veiculos)
-{
+int diasdoMes(int mes, int ano){
+    int dias[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+    // Verifica se é um ano bissexto e atualiza o número de dias em fevereiro
+    if ((ano % 4 == 0 && ano % 100 != 0) || (ano % 400 == 0)) {
+        dias[1] = 29;
+    }
+
+    return dias[mes - 1];
+}
+
+
+void devolver_veiculo(Locacao *locacao, Veiculos *veiculos) {
     int cnh;
     char placa[50];
-    // Solicita o nome do cliente e a placa do carro
-    printf("Digite a cnh cliente: ");
+
+    printf("DIGITE A CNH CLIENTE: ");
     scanf("%d", &cnh);
 
-    printf("Digite a placa do carro: ");
+    printf("DIGITE A PLACA DO CARRO: ");
     scanf("%s", placa);
 
-    // Chama a funcao para verificar se o nome e a placa foram encontradas na locacao
-    // Se for diferente de NULL significa que foi encontrado e sera possivel devolver o veiculo
-    // Mudando a flag pra true
     Locacao *loc = encontrar_locacao(locacao, cnh, placa);
 
-    if (loc != NULL)
-    {
-        int novaQuilometragem, dias, valorTotal;
-        printf("Digite a nova quilometragem: ");
+    if (loc != NULL) {
+        int novaQuilometragem, difeQuilometragem, dias, valorTotal, diasDevolucao;
+
+        printf("DIGITE A NOVA QUILOMETRAGEM: ");
         scanf("%d", &novaQuilometragem);
 
-        // calcula os dias de locacao
+        // Calcula a diferença na quilometragem
+        difeQuilometragem = novaQuilometragem - loc->veiculo_locado->quilometragem;
+
+        // Calcula o valor total da locação
         dias = compare_datas(loc->retirada, loc->devolucao);
+        valorTotal = dias * loc->veiculo_locado->valor_diaria + difeQuilometragem;
 
-        // calcula o valor total entre dias de locacao * valor da diaria
-        valorTotal = dias * loc->veiculo_locado->valor_diaria;
+        // Correção para casos onde a locação atravessa meses diferentes
+        if (loc->retirada.mes != loc->devolucao.mes) {
+            // Calcula o número total de dias no mês de devolução
+            diasDevolucao = diasdoMes(loc->devolucao.mes, loc->devolucao.ano);
+            //calculo de quantos de locacao ocorrem no mes colocando o +1 para incluir o proprio dia de devolucao
+            valorTotal += (diasDevolucao - loc->devolucao.dia + 1) * loc->veiculo_locado->valor_diaria;
+        }
 
-        // armazena a nova quilometragem do veiculo
+        // Atualiza a quilometragem do veículo
         loc->veiculo_locado->quilometragem = novaQuilometragem;
 
-        // deixa o veiculo disponivel para locacao
+        // Deixa o veículo disponível para locação
         loc->veiculo_locado->disponibilidade = true;
 
-        printf("Veiculo devolvido com sucesso.\n");
-        printf("Valor total a pagar R$ %d\n", valorTotal);
-    }
-    else
-    {
-        printf("Locacao nao foi encontrada.\n");
+        printf("VEICULO DEVOLVIDO COM SUCESSO.\n");
+        
+        printf("VALOR TOTAL A PAGAR R$ %d\n", valorTotal);
+    } else {
+        printf("LOCACAO NAO FOI ENCONTRADA.\n");
     }
 }
+
+
 
 void listar_locacao(Locacao *locacao)
 {
@@ -203,7 +221,7 @@ void listar_locacao(Locacao *locacao)
 
     if (locacao == NULL)
     {
-        printf("Nao existe nenhuma locacao.\n");
+        printf("NAO EXISTE NENHUMA LOCACAO.\n");
     }
     else
     {
@@ -211,10 +229,10 @@ void listar_locacao(Locacao *locacao)
 
         for (p = locacao; p != NULL; p = p->prox)
         {
-            printf("Nome do Cliente: %s\n", p->cliente->nome);
-            printf("Placa do Veiculo: %s\n", p->veiculo_locado->placa);
-            printf("Data de Retirada: %d/%d/%d\n", p->retirada.dia, p->retirada.mes, p->retirada.ano);
-            printf("Data de Devolucao: %d/%d/%d\n", p->devolucao.dia, p->devolucao.mes, p->devolucao.ano);
+            printf("NOME DO CLIENTE: %s\n", p->cliente->nome);
+            printf("PLACA DO VEICULO: %s\n", p->veiculo_locado->placa);
+            printf("DATA DE RETIRADA: %d/%d/%d\n", p->retirada.dia, p->retirada.mes, p->retirada.ano);
+            printf("DATA DE DEVOLUCAO: %d/%d/%d\n", p->devolucao.dia, p->devolucao.mes, p->devolucao.ano);
         }
     }
 }
@@ -229,14 +247,14 @@ void listar_loc_ativas(Locacao *locacao)
         printf("NAO EXISTEM LOCACOES REALIZADAS!!\n");
         return;
     }
-    printf("Informe o dia da locacao: ");
+    printf("INFORME O DIA DA LOCACAO: ");
     scanf("%d", &data.dia);
-    printf("Informe o mes da locacao: ");
+    printf("INFORME O MES DA LOCACAO: ");
     scanf("%d", &data.mes);
-    printf("Informe o ano da locacao: ");
+    printf("INFORME O ANO DA LOCACAO: ");
     scanf("%d", &data.ano);
 
-    printf("Locacoes ativas no dia: %d/%d/%d\n\n", data.dia, data.mes, data.ano);
+    printf("LOCACOES ATIVAS NO DIA: %d/%d/%d\n\n", data.dia, data.mes, data.ano);
 
     for (p = locacao; p != NULL; p = p->prox)
     {
@@ -244,17 +262,17 @@ void listar_loc_ativas(Locacao *locacao)
         if (compare_datas(p->retirada, data) <= 0 && compare_datas(p->devolucao, data) >= 0)
         {
             // lista as informacoes e seta encontrou como verdadeiro
-            printf("Nome do cliente: %s\n", p->cliente->nome);
-            printf("Placa do veiculo: %s\n", p->veiculo_locado->placa);
-            printf("Data de retirada: %d/%d/%d\n", p->retirada.dia, p->retirada.mes, p->retirada.ano);
-            printf("Data de devolucao: %d/%d/%d\n", p->devolucao.dia, p->devolucao.mes, p->devolucao.ano);
+            printf("NOME DO CLIENTE: %s\n", p->cliente->nome);
+            printf("PLACA DO VEICULO: %s\n", p->veiculo_locado->placa);
+            printf("DATA DE RETIRADA: %d/%d/%d\n", p->retirada.dia, p->retirada.mes, p->retirada.ano);
+            printf("DATA DE DEVOLUCAO: %d/%d/%d\n", p->devolucao.dia, p->devolucao.mes, p->devolucao.ano);
             encontrou = true;
         }
     }
 
     if (encontrou == false)
     {
-        printf("Nao possuem locacoes ativas na data %d/%d/%d\n", data.dia, data.mes, data.ano);
+        printf("NAO POSSUEM LOCACOES ATIVAS NA DATA %d/%d/%d\n", data.dia, data.mes, data.ano);
     }
 }
 
@@ -269,7 +287,7 @@ void listar_loc_realizadas(Locacao *locacao)
         printf("NAO EXISTEM LOCACOES!!\n");
         return;
     }
-    printf("Digite a CHN do cliente: ");
+    printf("DIGITE A CHN DO CLIENTE: ");
     scanf("%d", &cnh);
 
     for (p = locacao; p != NULL; p = p->prox)
@@ -277,49 +295,44 @@ void listar_loc_realizadas(Locacao *locacao)
         // compara a chn do cliente com a fornecida pelo usuario, se for igual seta encontrou como verdadeiro
         if (cnh == p->cliente->cnh && p->cliente != NULL)
         {
-            printf("Locacoes feitas pelo cliente: %s\n", p->cliente->nome);
-            printf("Placa do veiculo: %s\n", p->veiculo_locado->placa);
-            printf("Data de retirada: %d/%d/%d\n", p->retirada.dia, p->retirada.mes, p->retirada.ano);
-            printf("Data de devolucao: %d/%d/%d\n", p->devolucao.dia, p->devolucao.mes, p->devolucao.ano);
+            printf("LOCACOES FEITAS PELO CLIENTE: %s\n", p->cliente->nome);
+            printf("PLACA DO VEICULO: %s\n", p->veiculo_locado->placa);
+            printf("DATA DE RETIRADA: %d/%d/%d\n", p->retirada.dia, p->retirada.mes, p->retirada.ano);
+            printf("DATA DE DEVOLUCAO: %d/%d/%d\n", p->devolucao.dia, p->devolucao.mes, p->devolucao.ano);
             encontrou = true;
         }
     }
 
     if (encontrou == false)
     {
-        printf("Nao foi encontrado nenhuma locacao do cliente com CNH: %d", cnh);
+        printf("NAO FOI ENCONTRADO NENHUMA LOCACAO DO CLIENTE COM CNH: %d", cnh);
     }
 }
 
-// errado o CALCULO;
 void listar_faturamento_mes(Locacao *locacao)
 {
-    bool encontrou = false;
-    int dias, mes, faturamento, valorTotal;
+    int dias, mes, faturamento = 0;
     Locacao *p;
 
-    printf("Informe o mes para consultar o faturamento: ");
+    printf("INFORME O MES PARA CONSULTAR O FATURAMENTO: ");
     scanf("%d", &mes);
 
-    printf("Faturamento da locador no mes %d.\n", mes);
+    printf("FATURAMENTO DA LOCADORA NO MES %d:\n", mes);
     for (p = locacao; p != NULL; p = p->prox)
     {
-        // verifca o mes das locacoes com o mes fornecido pelo usuario para poder fazer o calculo do faturamento naquele mes
         if (p->retirada.mes == mes)
         {
             dias = compare_datas(p->retirada, p->devolucao);
-            valorTotal = dias * p->veiculo_locado->valor_diaria;
-            faturamento += valorTotal;
-            encontrou = true;
+            faturamento += dias * p->veiculo_locado->valor_diaria;
         }
     }
 
-    if (encontrou == false)
+    if (faturamento < 0)
     {
-        printf("Nao houve faturamente no mes: %d", mes);
+        printf("NAO HOUVE FATURAMENTO NO MES %d.\n", mes);
     }
     else
     {
-        printf("Valor faturado: %d\n", faturamento);
+        printf("VALOR FATURADO NO MES %d: R$ %d\n", mes, faturamento);
     }
 }
