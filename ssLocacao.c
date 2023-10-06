@@ -160,12 +160,12 @@ Locacao *realizar_locacao(Locacao *locacao, Clientes *clientes, Veiculos *veicul
 
     if (novo->veiculo_locado->disponibilidade == true)
     {
-        printf("LOCACAO REALIZADA COM SUCESSO!!\n");
         datas_de_locacao(&retirada, &devolucao);
         novo->retirada = retirada;
         novo->devolucao = devolucao;
         novo->valor_total_pago = calcula_valor_locacao(novo);
         novo->veiculo_locado->disponibilidade = false;
+        printf("LOCACAO REALIZADA COM SUCESSO!!\n");
     }
     else
     {

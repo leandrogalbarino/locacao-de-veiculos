@@ -173,7 +173,8 @@ void listar_placa_3_mais_rodados(Veiculos *veiculos)
     for (p = veiculos; p != NULL && num_veiculos < 3; p = p->prox)
     {
         num_veiculos++;
-        printf("%d - PLACA:%s\n", num_veiculos, p->placa);
+        printf("%d - PLACA:%s ", num_veiculos, p->placa);
+        printf("| QUILOMETRAGEM:%d\n", p->quilometragem);
     }
 
     if (num_veiculos < 3)

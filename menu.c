@@ -102,7 +102,6 @@ void menu_principal(Veiculos **veiculos, Clientes **clientes, Locacao **locacao)
     int escolha;
     do
     {
-        system("cls");
         printf("\tMENU\n");
 
         printf("1. Incluir veiculos\n");
